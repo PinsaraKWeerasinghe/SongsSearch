@@ -1,26 +1,43 @@
-PUT test_lyrics
+PUT /esmap_v3
 {
   "settings":{
     "analysis":{
       "analyzer":{
         "edgengram_and_stopwords":{
           "tokenizer":"standard",
-          "filter":["3_100_edgegrams","mine_stop_filter"]
+          "filter":["2_100_edge_grams","stop_filter"]
         },
         "edgengram":{
           "tokenizer":"standard",
-          "filter":["3_100_edgegrams"]
+          "filter":["2_100_edge_grams"]
+        },
+        "artist":{
+          "tokenizer":"standard",
+          "filter": ["2_100_edge_grams","stop_filter"],
+          "char_filter":["mappings_char_filter"]
         }
       },
       "filter":{
-        "3_100_edgegrams":{
+        "2_100_edge_grams":{
           "type": "edge_ngram",
-          "min_gram": 3,
+          "min_gram": 2,
           "max_gram": 100
         },
-        "mine_stop_filter":{
+        "stop_filter":{
           "type":"stop",
-          "stopwords":["සහ","හා", "වැනි", "සේ", "‌මෙන්", "සමග"]
+          "stopwords":["සහ", "වැනි", "සේ", "‌මෙන්", "සමග", "හා", "වුනත්"]
+        }
+      },
+      "char_filter": {
+        "mappings_char_filter": {
+          "type": "mapping",
+          "mappings": [
+            ",=> ",
+            "!=> ",
+            "|=> ",
+            "-=> ",
+            "/=> "
+          ]
         }
       }
     }
@@ -31,37 +48,34 @@ PUT test_lyrics
         "analyzer": "edgengram_and_stopwords", 
         "type": "text"
       },
-      "artists":{
-        "analyzer": "edgengram", 
+      "artist":{
+        "analyzer": "artist", 
         "type": "text"
       },
       "movie":{
         "analyzer": "edgengram", 
         "type": "text"
       },
-      "songName":{
+      "name":{
         "analyzer": "edgengram", 
         "type": "text"
       },
-      "genre":{
+      "genere":{
         "analyzer": "edgengram", 
-        "type": "text"
-      },
-      "key":{
         "type": "text"
       },
       "views":{
+        "type": "text"
+      },
+      "shares":{
         "type": "long"
       },
-      "lyricsCreater":{
-        "analyzer": "edgengram", 
+      "lyrics by":{
+        "analyzer": "artist", 
         "type": "text"
       },
-      "music":{
-        "analyzer": "edgengram", 
-        "type": "text"
-      },
-      "beat":{
+      "music by":{
+        "analyzer": "artist", 
         "type": "text"
       }
     }
