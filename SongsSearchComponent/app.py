@@ -1,31 +1,46 @@
+import splitter
+import classifiere
+
 from flask import Flask,redirect,url_for,render_template,request,json
-from sinling import SinhalaTokenizer
+#from sinling import SinhalaTokenizer
 import requests
 app = Flask(__name__,template_folder='template')
 
-@app.route('/admin')
-def hello_world():
-    return render_template('index.html')
 
-@app.route('/result/<result>')
-def res(result):
-    print(result)
-    lyrics=json.loads(result)
-    
-    return render_template('home.html',result=lyrics['hits']['hits'])
-
-@app.route('/admin',methods=['POST'])
+@app.route('/search',methods=['GET'])
 def admin():
-    text=request.form['qry']
+    text=request.args['text']
     searchResults=json.dumps(getSearchResults(text))
-    text=None;
-    print(text)
-    return redirect(url_for("res",result=searchResults));
+    return searchResults
 
 
 def getSearchResults(text):
-    reqJson={  "query": {    "multi_match" : {      "query":text,      "fields": [ "lyrics","artist"]     }  }}
-    response=requests.get("http://localhost:9200/lyrics/_search",json=reqJson)
-    return response.json()
+    tokenList,query=splitter.process_word(text)
+    result=classifiere.classify_query(tokenList,100,text)
+    print(query)
+    fields=[]
+    for field in result.keys():
+        if result[field]==True:
+            fields.append(field)
 
-# curl -XGET "http://localhost:9200/lyrics/_search" -H 'Content-Type: application/json' -d'{  "query": {    "multi_match" : {      "query":    "මිනිසුන්  ",      "fields": [ "lyrics"]     }  }}'
+    print(fields)
+
+    if(query==" " or query==""):
+        reqJson={
+            "query": { "match_all": {} },
+            "size":result["total"]["total"]
+        }  
+    else:
+        reqJson={  
+            "query": { 
+                "multi_match" : { 
+                    "query": query, 
+                    "fields": fields 
+                } 
+            },
+            "size":result["total"]["total"]
+        }
+    
+
+    response=requests.get("http://localhost:9200/esmap_v3/_search",json=reqJson)
+    return response.json()

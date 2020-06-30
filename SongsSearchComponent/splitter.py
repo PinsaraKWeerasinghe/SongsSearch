@@ -1,3 +1,6 @@
+import sys
+sys.path.insert(0, "/media/pinsara/Education/ACADEMIC_FILES/SEM_7/DM/sinling")
+
 from sinling import word_splitter
 
 def process_word(sentence):
@@ -13,7 +16,6 @@ def process_word(sentence):
     final_query = " "
     for piece in temp_list:
         final_query = final_query+" "+piece  
-    print(final_query)
     return temp_list,final_query
 
     
