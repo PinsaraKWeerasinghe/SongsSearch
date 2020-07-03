@@ -1,26 +1,26 @@
-PUT /esmap_v3
+PUT /esmap_v6
 {
   "settings":{
     "analysis":{
       "analyzer":{
         "edgengram_and_stopwords":{
           "tokenizer":"standard",
-          "filter":["2_100_edge_grams","stop_filter"]
+          "filter":["3_100_edge_grams","stop_filter"]
         },
         "edgengram":{
           "tokenizer":"standard",
-          "filter":["2_100_edge_grams"]
+          "filter":["3_100_edge_grams"]
         },
         "artist":{
           "tokenizer":"standard",
-          "filter": ["2_100_edge_grams","stop_filter"],
+          "filter": ["3_100_edge_grams","stop_filter"],
           "char_filter":["mappings_char_filter"]
         }
       },
       "filter":{
-        "2_100_edge_grams":{
+        "3_100_edge_grams":{
           "type": "edge_ngram",
-          "min_gram": 2,
+          "min_gram": 3,
           "max_gram": 100
         },
         "stop_filter":{
@@ -65,7 +65,7 @@ PUT /esmap_v3
         "type": "text"
       },
       "views":{
-        "type": "text"
+        "type": "long"
       },
       "shares":{
         "type": "long"

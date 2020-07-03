@@ -23,13 +23,13 @@ def classify_query(token_list,default_amount,raw_string):
     result = check_rating(result,raw_string)
 
     result_amount = 0
+    print(token_list)
     for token in token_list:
         if (token.isnumeric()):
             if (int(token)<default_amount):
                 result['total']['total'] = int(token)
             else:
                 result['total']['total'] = default_amount
-        break
     
     return result
     
