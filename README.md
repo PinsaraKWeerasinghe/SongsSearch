@@ -25,5 +25,5 @@ This project is based on [elastic](https://www.elastic.co/ "elastic") search. [K
 
 #1. Scraping
 Scraping is doing in SongsSearch/ScrapeSongsComponent/Scrape_Scrapy/ directory. in here using [SinhalaSongbook.com](https://sinhalasongbook.com/ "SinhalaSongbook.com") website to scrape data. move your comand line derectory to above derectory and run follwing command.
-`scrapy crawl sinhala_songs_lyrics_spider  -o data.json`
+    	scrapy crawl sinhala_songs_lyrics_spider  -o data.json
 It will crate a .json file that include all scraped data.
